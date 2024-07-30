@@ -1,36 +1,35 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## The "Front end"
+The front end application is comprised of a single form that takes as inputs:
+  - full name,
+  - birth year, and
+  - country
+Using these inputs, the application fetches from an API endpoint that queries against OFAC sanction lists to check for matches for the individual.
 
-First, run the development server:
+## The "Back end"
+The back end portion is implemented via a serverless function. The serverless function makes use of [OFAC-api.com](https://docs.ofac-api.com/) to query for matches; more specifically, it leverages the screening api.
+The API token uses the free tier and is limited to 100 requests per month.
 
+## Deployed application
+The application is accessible via [this deployed url](https://ofac-screening.vercel.app/)
+
+## To run locally...
+Create a `.env` file with your own OFAC api token
+```bash
+OFAC_API_KEY={your key}
+```
+Install the npm dependencies 
+```bash
+npm install
+```
+Then spin up the local instance
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+Access at http://localhost:3000
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Improvements & Optimizations
+This is just a simple webapp for demo purposes. Some rough edges to clean up would be better error handling in terms of UI/UX, logging, and monitoring.
+With a real, paid-tier OFAC token, some work should also probably be done to limit unauthenticated (from the perspective of this application) API usage.
+A deeper dive of the OFAC api is also something to do, as there are many tweaks that can be done (e.g. `minScore` param, parsing aliases, etc); a deeper dive could allow us to better leverage the API and possibly infer more data from information such as aliases.
